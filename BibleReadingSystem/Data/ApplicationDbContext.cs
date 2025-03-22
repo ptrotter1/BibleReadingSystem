@@ -15,9 +15,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ReadingPlan> ReadingPlans { get; set; } = null!;
     public DbSet<ReadingPlanInstance> ReadingPlanInstances { get; set; } = null!;
     public DbSet<ReadingPlanList> ReadingPlanLists { get; set; } = null!;
+    public DbSet<ReadingPlanListBibleBook> ReadingPlanListBibleBooks { get; set; } = null!;
+    public DbSet<ReadingPlanListBibleBookCompletion> ReadingPlanListBibleBookCompletions { get; set; } = null!;
     public DbSet<ReadingPlanListBibleChapter> ReadingPlanListBibleChapters { get; set; } = null!;
     public DbSet<ReadingPlanListBibleChapterCompletion> ReadingPlanListBibleChapterCompletions { get; set; } = null!;
     public DbSet<ReadingPlanListInstance> ReadingPlanListInstances { get; set; } = null!;
+    public DbSet<ReadingPlanMode> ReadingPlanModes { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -36,6 +39,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         builder.Entity<BibleBook>().HasData(Entities.BibleBooks.All);
         builder.Entity<BibleChapter>().HasData(Entities.BibleChapters.All);
+        builder.Entity<ReadingPlan>().HasData(Entities.ReadingPlans.All);
+        builder.Entity<ReadingPlanMode>().HasData(Entities.ReadingPlanModes.All);
+        builder.Entity<ReadingPlanList>().HasData(Entities.ReadingPlanLists.All);
+        builder.Entity<ReadingPlanListBibleBook>().HasData(ProfessorGrantHornerListBibleBooks.All);
         
         // Add the default query filter for entities that implement ISoftDeletable
         foreach (var entityType in builder.Model.GetEntityTypes())
