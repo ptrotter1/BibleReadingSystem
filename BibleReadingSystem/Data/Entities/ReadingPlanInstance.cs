@@ -2,18 +2,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BibleReadingSystem.Data.Entities;
 
-public class ReadingPlanInstance
+public class ReadingPlanInstance : ISoftDeletable
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
-    public int ReadingPlanId { get; set; }
+    public Guid ReadingPlanId { get; set; }
     
-    [ForeignKey("ReadingPlanId")]
+    [ForeignKey(nameof(ReadingPlanId))]
     public ReadingPlan ReadingPlan { get; set; } = null!;
     
     public Guid AppUserId { get; set; }
     
-    [ForeignKey("AppUserId")]
+    [ForeignKey(nameof(AppUserId))]
     public AppUser AppUser { get; set; } = null!;
     
     public DateTimeOffset StartDate { get; set; }
@@ -21,4 +21,5 @@ public class ReadingPlanInstance
     public DateTimeOffset? EndDate { get; set; }
     
     public bool IsCompleted => EndDate.HasValue;
+    public bool IsDeleted { get; set; }
 }

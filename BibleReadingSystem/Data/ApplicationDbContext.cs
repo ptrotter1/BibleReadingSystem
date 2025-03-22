@@ -1,4 +1,5 @@
 using BibleReadingSystem.Data.Entities;
+using BibleReadingSystem.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     private const string DefaultSchema = "brs";
     
+    public DbSet<BibleBook> BibleBooks { get; set; } = null!;
     public DbSet<BibleChapter> BibleChapters { get; set; } = null!;
     public DbSet<ReadingPlan> ReadingPlans { get; set; } = null!;
     public DbSet<ReadingPlanInstance> ReadingPlanInstances { get; set; } = null!;
@@ -31,5 +33,23 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<AppUserLogin>(entity => entity.ToTable("AppUserLogins"));
         builder.Entity<AppRoleClaim>(entity => entity.ToTable("AppRoleClaims"));
         builder.Entity<AppUserToken>(entity => entity.ToTable("AppUserTokens"));
+
+        builder.Entity<BibleBook>().HasData(Entities.BibleBooks.All);
+        builder.Entity<BibleChapter>().HasData(Entities.BibleChapters.All);
+        
+        // Add the default query filter for entities that implement ISoftDeletable
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+            {
+                entityType.AddSoftDeleteQueryFilter();
+            }
+            
+            // Turn off cascading deletes
+            foreach (var foreignKey in entityType.GetForeignKeys())
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+        }
     }
 }

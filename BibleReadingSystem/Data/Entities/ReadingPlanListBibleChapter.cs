@@ -2,17 +2,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BibleReadingSystem.Data.Entities;
 
-public class ReadingPlanListBibleChapter
+public class ReadingPlanListBibleChapter : ISoftDeletable
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
-    public int ReadingPlanListId { get; set; }
+    public Guid ReadingPlanListId { get; set; }
     
-    [ForeignKey("ReadingPlanListId")]
+    [ForeignKey(nameof(ReadingPlanListId))]
     public ReadingPlanList ReadingPlanList { get; set; } = null!;
     
-    [ForeignKey("BibleChapterId")]
-    public int BibleChapterId { get; set; }
+    public Guid BibleChapterId { get; set; }
     
+    [ForeignKey(nameof(BibleChapterId))]
     public BibleChapter BibleChapter { get; set; } = null!;
+    public bool IsDeleted { get; set; }
 }

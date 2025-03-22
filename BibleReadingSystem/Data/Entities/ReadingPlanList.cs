@@ -3,19 +3,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BibleReadingSystem.Data.Entities;
 
-public class ReadingPlanList
+public class ReadingPlanList : ISoftDeletable
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     [MaxLength(256)]
     public string Name { get; set; } = string.Empty;
     
-    public int ReadingPlanId { get; set; }
+    public Guid ReadingPlanId { get; set; }
     
-    [ForeignKey("ReadingPlanId")]
+    [ForeignKey(nameof(ReadingPlanId))]
     public ReadingPlan ReadingPlan { get; set; } = null!;
     
     public ICollection<ReadingPlanListBibleChapter> BibleChapters { get; set; } = new List<ReadingPlanListBibleChapter>();
     
     public int Order { get; set; }
+    public bool IsDeleted { get; set; }
 }
